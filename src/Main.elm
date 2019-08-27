@@ -4,6 +4,7 @@ import Browser
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onInput)
+import Regex as Regex
 
 
 main =
@@ -77,5 +78,24 @@ viewValidation model =
     if model.password == model.passwordAgain then
         div [ style "color" "green" ] [ text "OK" ]
 
+    else if String.length model.password < 8 then
+        div [ style "color" "red" ] [ text "Password min length is eight!" ]
+
+    else if not (Regex.contains regexNumber model.password) then
+        div [ style "color" "red" ] [ text "Password must contain number" ]
+
     else
         div [ style "color" "red" ] [ text "Password do not match!" ]
+
+
+regexNumber : Regex.Regex
+regexNumber =
+    Maybe.withDefault Regex.never <|
+        Regex.fromString "[0-9]"
+
+
+
+-- regexNumber : Regex.Regex
+-- regexNumber =
+--   Maybe.withDefault Regex.never <|
+--     Regex.fromString "[0-9]"
